@@ -1,4 +1,5 @@
 import json
+import pprint
 import sys
 from TwitterAPI import TwitterAPI
 from sys import argv
@@ -9,11 +10,11 @@ try:
     keyword=argv[1]
     api = TwitterAPI("JUTFW0LBNvkB645AoRJ8u8bN2", "X3TpSFPAlx0AWTe1LuNujBBriEOiXsDBARVUWlDkzE0fSEkiUV", "2851557234-dNayrWLxWS1LG8qfD42ygsUmSjTyunnvRwEl7sY", "uCBY0xb2aW8YXTWrLXV9dQTJoXKa0PLlKCquT9YOohqe8")
     tweets = []
-    print "Starting Twitter miner"
+    #print "Starting Twitter miner"
     r = api.request('statuses/filter', {'track':keyword})
     for item in r.get_iterator():
         try:
-            print item
+            print json.dumps(item, sort_keys=True)
             #p
             #if item != None:
             #    if item['geo'] != None:
