@@ -2,7 +2,6 @@ import fileinput
 import json
 import sys
 import os
-import nltk
 from collections import Counter
 
 line = []
@@ -11,6 +10,7 @@ neg=[]
 wordList=[]
 posEmoList=[]
 negEmoList=[]
+neutralList=[]
 
 
 with open('positive.txt') as f:
@@ -23,19 +23,24 @@ with open('negative.txt') as f:
 	f.close()
 
 inputfilename = sys.argv[1]
-
+count=0
 for line in fileinput.input([inputfilename]):
 	tweet = json.loads(line)
-	tweettext=tweet['text']
-	for word in tweettext.lower().split():
+	count+=1
+	flag=0
+	tweettext=tweet['text'].lower().replace('!','').replace('#','')
+	for word in tweettext.split():
 		wordList.append(word)
 		if word in pos:
-			print "pos: %s" %word
+			print "%d pos: %s" %(count,word)
 			posEmoList.append(word)
+			flag=1
 		elif word in neg:
-			print "neg: %s" %word
+			print "%d neg: %s" %(count,word)
 			negEmoList.append(word)
-
+			flag=1
+	if(flag==0):
+		neutralList.append(tweet['text'])
 
 c1 = Counter(wordList)
 print "Most common words are"
@@ -51,4 +56,6 @@ print "Most common negative words are"
 print c3.most_common(10)
 #print "Tweets positive about it: %d" %len(negEmoList)
 
+for line in neutralList:
+	print line+"\n"
 
